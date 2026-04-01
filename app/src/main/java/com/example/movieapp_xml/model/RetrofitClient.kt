@@ -12,8 +12,7 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    // Biến này sẽ được gọi từ MainActivity
+    
     val apiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }

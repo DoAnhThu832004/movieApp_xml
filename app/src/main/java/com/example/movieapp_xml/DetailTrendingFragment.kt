@@ -5,40 +5,61 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import coil.load
 import com.example.movieapp_xml.databinding.FragmentDetailTrendingBinding
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+// Trong DetailTrendingFragment.kt
 class DetailTrendingFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
     private var _binding: FragmentDetailTrendingBinding? = null
     private val binding get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_detail_trending, container, false)
+    ): View {
+        _binding = FragmentDetailTrendingBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Nhận dữ liệu từ arguments
+        arguments?.let {
+            binding.tvTitle.text = it.getString("title")
+            binding.tvOverview.text = it.getString("overview")
+            binding.tvVoteAverage.text = it.getString("vote")
+            binding.tvReleaseDate.text = "Release date: ${it.getString("date")}"
+
+            // Load ảnh backdrop bằng Coil
+            val backdropUrl = "https://image.tmdb.org/t/p/w780${it.getString("backdrop")}"
+            binding.ivBackdrop.load(backdropUrl)
+        }
+
+        // Xử lý nút quay lại
+        binding.btnBack.setOnClickListener {
+            parentFragmentManager.popBackStack()
+            // Hiện lại RecyclerView trong MainActivity nếu cần
+            (activity as? MainActivity)?.findViewById<View>(R.id.rvTrending)?.visibility = View.VISIBLE
+        }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(title: String, overview: String, backdrop: String, vote: String, date: String) =
             DetailTrendingFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString("title", title)
+                    putString("overview", overview)
+                    putString("backdrop", backdrop)
+                    putString("vote", vote)
+                    putString("date", date)
                 }
             }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

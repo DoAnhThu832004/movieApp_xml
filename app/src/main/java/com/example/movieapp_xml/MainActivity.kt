@@ -1,11 +1,13 @@
 package com.example.movieapp_xml
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movieapp.view.adapter.MovieAdapter
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupViewModel()
         setupRecyclerView()
+        setupBottomNavigation()
         observeData()
     }
     // Trong MainActivity.kt
@@ -46,7 +49,23 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         // Khởi tạo Adapter với sự kiện click
         movieAdapter = MovieAdapter { movie ->
-            Toast.makeText(this, "Bạn chọn: ${movie.title}", Toast.LENGTH_SHORT).show()
+            // Tạo Fragment mới và truyền dữ liệu phim qua arguments
+            val detailFragment = DetailTrendingFragment.newInstance(
+                movie.title ?: "",
+                movie.overview ?: "",
+                movie.backdrop_path ?: "",
+                movie.vote_average.toString(),
+                movie.release_date ?: ""
+            )
+
+            // Thực hiện chuyển Fragment
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, detailFragment) // Thay thế nội dung trong container
+                .addToBackStack(null) // Cho phép nhấn nút Back để quay lại danh sách
+                .commit()
+
+            // (Tùy chọn) Ẩn RecyclerView đi để Fragment chiếm toàn màn hình
+            binding.rvTrending.visibility = android.view.View.GONE
         }
 
         // Cấu hình RecyclerView hiển thị dạng lưới 2 cột
@@ -70,5 +89,37 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
             }
         }
+    }
+    private fun setupBottomNavigation() {
+        binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_home -> {
+                    // Xử lý khi chọn Home
+                    binding.rvTrending.visibility = View.VISIBLE
+                    binding.fragmentContainer.visibility = View.GONE
+                    true
+                }
+
+                R.id.nav_play -> {
+                    showFragment(PlayFragment())
+                    true
+                }
+                R.id.nav_profile -> {
+                    // Khi nhấn Profile: Ẩn danh sách, hiện container và nạp ProfileFragment
+                    showFragment(BlankFragment())
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+    private fun showFragment(fragment: Fragment) {
+        binding.rvTrending.visibility = View.GONE
+        binding.fragmentContainer.visibility = View.VISIBLE
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }
