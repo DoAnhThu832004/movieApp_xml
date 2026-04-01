@@ -33,12 +33,15 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
         observeData()
     }
+    // Trong MainActivity.kt
     private fun setupViewModel() {
-        // Tạo ApiService (Bạn cần đảm bảo RetrofitClient đã được viết sẵn)
         val apiService = RetrofitClient.apiService
         val factory = TrendingViewModelFactory(apiService)
 
         viewModel = ViewModelProvider(this, factory)[TrendingViewModel::class.java]
+
+        // THÊM DÒNG NÀY: Gọi API với key của bạn (ví dụ lấy từ TMDB)
+        viewModel.getTrending("0e7d7148db620788481ce0c35b58fefd")
     }
     private fun setupRecyclerView() {
         // Khởi tạo Adapter với sự kiện click
