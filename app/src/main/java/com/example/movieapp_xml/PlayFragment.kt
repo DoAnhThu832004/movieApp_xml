@@ -1,59 +1,86 @@
 package com.example.movieapp_xml
 
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.movieapp_xml.databinding.FragmentPlayBinding
+import com.example.movieapp_xml.model.RetrofitClient
+import com.example.movieapp_xml.view.MovieAdapter // Có thể dùng lại hoặc tạo Adapter mới
+import com.example.movieapp_xml.viewmodel.TrendingViewModel
+import com.example.movieapp_xml.viewmodel.TrendingViewModelFactory
+import com.google.android.material.tabs.TabLayout
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PlayFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PlayFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var binding: FragmentPlayBinding
+    private lateinit var viewModel: TrendingViewModel
+    private lateinit var adapter: MovieAdapter
+    private val apiKey = "YOUR_API_KEY" // Thay bằng key của bạn
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentPlayBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Khởi tạo ViewModel (Sử dụng chung TrendingViewModel hoặc tạo mới tùy cấu trúc project)
+        val apiService = RetrofitClient.instance
+        val factory = TrendingViewModelFactory(apiService)
+        viewModel = ViewModelProvider(this, factory)[TrendingViewModel::class.java]
+
+        setupRecyclerView()
+        setupTabLayout()
+
+        // Mặc định tải "Now Playing"
+        viewModel.fetchTrendingMovies(apiKey)
+    }
+
+    private fun setupRecyclerView() {
+        adapter = MovieAdapter { movie ->
+            // Xử lý click xem chi tiết
+        }
+        binding.rvPlayMovies.adapter = adapter
+
+        viewModel.trendingMovies.observe(viewLifecycleOwner) { movies ->
+            adapter.submitList(movies)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_play, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlayFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlayFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun setupTabLayout() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {
+                        updateTheme("#6C63FF")
+                        // viewModel.fetchNowPlaying(apiKey) // Gọi hàm tương ứng trong ViewModel
+                    }
+                    1 -> {
+                        updateTheme("#FF4D86")
+                        // viewModel.fetchPopular(apiKey)
+                    }
+                    2 -> {
+                        updateTheme("#2ED3B7")
+                        // viewModel.fetchTopRated(apiKey)
+                    }
+                    3 -> {
+                        updateTheme("#FFFFC107")
+                        // viewModel.fetchUpcoming(apiKey)
+                    }
                 }
             }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+    private fun updateTheme(colorStr: String) {
+        val color = Color.parseColor(colorStr)
+        binding.headerBackground.setBackgroundColor(color)
+        binding.tabLayout.setSelectedTabIndicatorColor(Color.WHITE)
     }
 }

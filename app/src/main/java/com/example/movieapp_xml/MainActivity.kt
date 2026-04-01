@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
             // (Tùy chọn) Ẩn RecyclerView đi để Fragment chiếm toàn màn hình
             binding.rvTrending.visibility = android.view.View.GONE
+            binding.fragmentContainer.visibility = View.VISIBLE
         }
 
         // Cấu hình RecyclerView hiển thị dạng lưới 2 cột
