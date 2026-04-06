@@ -4,6 +4,9 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+    <style name="CircleImage" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
 
     <style name="Theme.MovieApp_xml" parent="Base.Theme.MovieApp_xml" />
 </resources>
