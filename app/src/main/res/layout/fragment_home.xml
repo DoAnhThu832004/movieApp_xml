@@ -3,68 +3,57 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="@color/black">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="250dp">
-            <ImageView android:id="@+id/ivBackdrop" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" />
-            <ImageButton android:id="@+id/btnBack" android:layout_width="48dp" android:layout_height="48dp" android:layout_margin="16dp" android:background="@drawable/bg_back_button" android:src="@drawable/baseline_brightness_1_24" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton android:id="@+id/btnPlay" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@android:drawable/ic_media_play" app:backgroundTint="#0000FF" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="16dp" android:background="#80000000" android:padding="8dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent">
-                <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@android:drawable/btn_star_big_on" />
-                <TextView android:id="@+id/tvRating" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#FFFFFF" />
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView android:id="@+id/tvTitle" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="16dp" android:textSize="24sp" android:textStyle="bold" android:textColor="#FFFFFF" />
-        <TextView android:id="@+id/tvOverview" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingHorizontal="16dp" android:textColor="#FFFFFF" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:padding="16dp" android:text="Genres" android:textSize="20sp" android:textColor="#FFFFFF" />
-        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rvGenres" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
-            android:id="@+id/tvCollectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="Thuộc bộ sưu tập"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+            android:text="Trending Movies"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cvCollection"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTrending"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_margin="16dp"
-            android:visibility="gone"
-            app:cardCornerRadius="12dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
 
-            <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/ivCollectionBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#66000000" />
-                <TextView
-                    android:id="@+id/tvCollectionNameBanner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Popular Characters"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPersons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Featured Collection"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCollections"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

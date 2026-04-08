@@ -46,27 +46,41 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         collectionViewModel = ViewModelProvider(this, CollectionViewModelFactory(apiService))[CollectionViewModel::class.java]
     }
 
+    // ... các import khác giữ nguyên
+
     private fun setupRecyclerViews() {
-        // 1. Trending Movies
+        // 1. Trending Movies -> Mở chi tiết phim
         val movieAdapter = MovieAdapter { movie ->
-            // Mở chi tiết phim
+            val detailFragment = DetailMovieFragment.newInstance(movie.id)
+            navigateTo(detailFragment)
         }
         binding.rvTrending.layoutManager = GridLayoutManager(context, 2)
         binding.rvTrending.adapter = movieAdapter
 
-        // 2. Popular Characters
+        // 2. Popular Characters -> Mở chi tiết diễn viên
         val characterAdapter = CharacterAdapter { personId ->
-            // Mở chi tiết diễn viên
+            val detailFragment = DetailCharacterFragment.newInstance(personId)
+            navigateTo(detailFragment)
         }
+        // Thiết kế cuộn ngang cho danh sách diễn viên
+        binding.rvPersons.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvPersons.adapter = characterAdapter
 
-        // 3. Collections (Dùng lại MovieAdapter vì bộ sưu tập chứa danh sách phim)
-
+        // 3. Collections (Danh sách phim trong bộ sưu tập)
         val collectionAdapter = MovieAdapter { movie ->
-            // Xử lý khi click vào phim trong bộ sưu tập
+            val detailFragment = DetailMovieFragment.newInstance(movie.id)
+            navigateTo(detailFragment)
         }
         binding.rvCollections.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvCollections.adapter = collectionAdapter
+    }
+
+    // Hàm bổ trợ để chuyển Fragment
+    private fun navigateTo(fragment: Fragment) {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment) // ID này phải khớp với container trong activity_main.xml
+            .addToBackStack(null) // Cho phép ấn nút back quay lại trang Home
+            .commit()
     }
 
     private fun observeData() {

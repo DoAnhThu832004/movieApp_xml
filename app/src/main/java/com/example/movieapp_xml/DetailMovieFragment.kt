@@ -21,7 +21,9 @@ class DetailMovieFragment : Fragment(R.layout.fragment_detail_movie) {
         val movieId = arguments?.getInt("movie_id") ?: return
         val apiKey = "0e7d7148db620788481ce0c35b58fefd"
 
-        viewModel = ViewModelProvider(this)[MovieViewModel::class.java]
+        val apiService = com.example.movieapp_xml.model.RetrofitClient.apiService
+        val factory = com.example.movieapp_xml.viewmodel.MovieViewModelFactory(apiService)
+        viewModel = ViewModelProvider(this, factory)[com.example.movieapp_xml.viewmodel.MovieViewModel::class.java]
         viewModel.getMovieDetail(movieId, apiKey)
 
         // Cấu hình RecyclerView cho Genres (cuộn ngang giống Compose)

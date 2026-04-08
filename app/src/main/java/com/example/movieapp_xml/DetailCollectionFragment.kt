@@ -40,9 +40,13 @@ class DetailCollectionFragment : Fragment(R.layout.fragment_detail_collection) {
     }
 
     private fun setupRecyclerView() {
-        // Khởi tạo adapter cho danh sách phim thành phần
         partsAdapter = MovieAdapter { movie ->
-            // Logic khi click vào một phim trong bộ sưu tập (ví dụ: mở chi tiết phim đó)
+            // Chuyển đến chi tiết phim khi click vào phim trong bộ sưu tập
+            val detailFragment = DetailMovieFragment.newInstance(movie.id)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.rvCollectionParts.apply {
