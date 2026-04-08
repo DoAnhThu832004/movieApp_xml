@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.movieapp.view.adapter.MovieAdapter
+import com.example.movieapp_xml.view.adapter.MovieAdapter
 import com.example.movieapp_xml.databinding.FragmentPlayBinding
 import com.example.movieapp_xml.model.RetrofitClient
 import com.example.movieapp_xml.model.Trending
